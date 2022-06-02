@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarNavDropdown"
+    aria-controls="navbarNavDropdown"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item" *ngIf="this.identidad.rol == 'ADMIN'">
+        <a class="nav-link" routerLink="/empresas" routerLinkActive="active"
+          >Empresas</a
+        >
+      </li>
+      <li class="nav-item" *ngIf="this.identidad.rol == 'EMPRESA'">
+        <a class="nav-link" routerLink="/sucursales" routerLinkActive="active"
+          >Sucursales</a
+        >
+      </li>
+      <li class="nav-item" *ngIf="this.identidad.rol == 'EMPRESA'">
+        <a class="nav-link" routerLink="/productos" routerLinkActive="active"
+          >Productos</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/inicio" routerLinkActive="active"
+          >Cerrar sesión</a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>

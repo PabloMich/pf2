@@ -1,0 +1,273 @@
+<app-navbar></app-navbar>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Sucursales</title>
+  </head>
+
+  <body>
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mis productos</h5>
+
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <ol class="list-group list-group-numbered">
+              <li
+                *ngFor="let productos of getProductos"
+                class="list-group-item d-flex justify-content-between align-items-start"
+              >
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">{{ productos.nombreProducto }}</div>
+                  Cantidad del producto: {{ productos.cantidadProducto }}
+                  <br />
+                </div>
+                <!--               <input type="number" class="form-control" placeholder="Cantidad a vender" name="cantidadProducto" #cantidadProducto="ngModel"
+              [(ngModel)]="getIdModelo.nombreSucursal" /> -->
+              </li>
+            </ol>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="offcanvas offcanvas-start"
+      tabindex="-1"
+      id="offcanvasExample"
+      aria-labelledby="offcanvasExampleLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+          Editar sucursal
+        </h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <form>
+          <div class="mb-3">
+            <label for="inputNombre" class="form-label"
+              >Nombre de la sucursal</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="inputNombre"
+              name="nombreSucursal"
+              #nombreSucursal="ngModel"
+              [(ngModel)]="getIdModelo.nombreSucursal"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="inputDireccion" class="form-label"
+              >Direccion de la sucursal</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="inputDireccionS"
+              name="direccionSucursal"
+              #direccionSucursal="ngModel"
+              [(ngModel)]="getIdModelo.direccionSucursal"
+            />
+          </div>
+
+          <button
+            class="btn btn-success"
+            data-bs-dismiss="offcanvas"
+            (click)="putSucursales()"
+          >
+            Guardar informacion
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container">
+      <button
+        id="ap"
+        class="btn btn-primary"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#modalAgregarEmpresa"
+      >
+        Agregar Sucursal
+      </button>
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <div class="row">
+        <div class="col-12 col-md-6" *ngFor="let sucursales of getModelo">
+          <div class="card text-center mb-3">
+            <div class="card-header">
+              Nombre de la sucursal: {{ sucursales.nombreSucursal }}
+            </div>
+            <div class="card-body">
+              <p class="card-text">
+                Direccion: {{ sucursales.direccionSucursal }} <br />
+              </p>
+              <div id="ola" class="card-footer text-muted">
+                <div
+                  class="btn-group"
+                  role="group"
+                  aria-label="Basic mixed styles example"
+                >
+                  <button
+                    id="btnDelete"
+                    class="noselect"
+                    (click)="deleteSucursales(sucursales._id)"
+                  >
+                    <span class="text">Eliminar</span>
+                    <span class="icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
+                        ></path>
+                      </svg>
+                    </span>
+                  </button>
+                  <button
+                    id="btnEdit"
+                    class="noselect"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasExample"
+                    aria-controls="offcanvasExample"
+                    (click)="getSucursalId(sucursales._id)"
+                  >
+                    <span class="text">Editar</span>
+                    <span class="icon">
+                      <i id="edit" class="fa-solid fa-pen-to-square"></i>
+                    </span>
+                  </button>
+                  <button
+                    (click)="getProducts(sucursales.nombreSucursal)"
+                    id="btnView"
+                    class="noselect"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                    aria-controls="offcanvasExample"
+                  >
+                    <span class="text">Mis productos</span>
+                    <span class="icon">
+                      <i id="eye" class="fa-solid fa-eye"></i>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="modalAgregarEmpresa"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Agregar Sucursal</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form #agregarSucursal="ngForm">
+              <div class="mb-3">
+                <label for="inputNombre" class="form-label">Nombre</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputNombre"
+                  name="nombreSucursal"
+                  #nombreSucursal="ngModel"
+                  [(ngModel)]="postModelo.nombreSucursal"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="inputDireccion" class="form-label">Dirección</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputCantidad"
+                  name="direccionSucursal"
+                  #direccionEmpresa="ngModel"
+                  [(ngModel)]="postModelo.direccionSucursal"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              (click)="postSucursales(agregarSucursal)"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

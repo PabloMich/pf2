@@ -1,0 +1,26 @@
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+.h-custom {
+  height: calc(100% - 73px);
+}
+body{
+  content: "";
+  position: fixed;
+  background: #040404 url("../inicio/assets/images/MicrosoftTeams-image.png") top right no-repeat;
+  background-size: cover;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  z-index: -1;
+}
+
+#btn {
+  color: black;
+  background-color: #f4d03f;
+}

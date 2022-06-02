@@ -1,0 +1,218 @@
+<app-navbar></app-navbar>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Productos</title>
+</head>
+
+<body>
+
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+        Editar producto
+      </h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form>
+        <div class="mb-3">
+          <label for="inputNombre" class="form-label">Nombre del producto</label>
+          <input type="text" class="form-control" id="inputNombre" name="nombreProducto" #nombreProducto="ngModel"
+            [(ngModel)]="getIdModelo.nombreProducto" />
+        </div>
+        <div class="mb-3">
+          <label for="inputProveedor" class="form-label">Nombre del proveedor</label>
+          <input type="text" class="form-control" id="inputProveedor" name="nombreProveedor" #nombreProveedor="ngModel"
+            [(ngModel)]="getIdModelo.nombreProveedor" />
+        </div>
+
+        <div class="mb-3">
+          <label for="inputProveedor" class="form-label">Nombre del proveedor</label>
+          <input type="number" class="form-control" id="inputStock" name="stock" #stock="ngModel"
+            [(ngModel)]="getIdModelo.stock" />
+        </div>
+
+        <button class="btn btn-success" data-bs-dismiss="offcanvas" (click)="putProductos()">
+          Guardar informacion
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container">
+    <button tton id="ap" class="btn btn-primary" type="button" data-bs-toggle="modal"
+      data-bs-target="#modalAgregarEmpresa">
+      Agregar Producto
+    </button>
+    <button tton id="op" class="btn btn-primary" type="button" data-bs-toggle="modal"
+      data-bs-target="#modalEnviarProducto" (click)="getSucursales()">
+      Enviar Producto
+    </button>
+
+    <div class="grupo">
+      <svg class="icono" aria-hidden="true" viewBox="0 0 24 24">
+        <g>
+          <path
+            d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+          </path>
+        </g>
+      </svg>
+      <input [(ngModel)]="search" placeholder="Buscar productos" type="search" class="input">
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6" *ngFor="let productos of getModelo | busqueda:search">
+        <div class="card text-center mb-3">
+          <div class="card-header">
+            {{ productos.nombreProducto }}
+          </div>
+          <div class="card-body">
+            <p class="card-text">
+              Proveedor: {{ productos.nombreProveedor }} <br />
+              Stock: {{ productos.stock }} unidades
+            </p>
+            <div id="ola" class="card-footer text-muted">
+              <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                <button id="btnDelete" class="noselect" (click)="deleteProductos(productos._id)">
+                  <span class="text">Eliminar</span>
+                  <span class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                      <path
+                        d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z">
+                      </path>
+                    </svg>
+                  </span>
+                </button>
+                <button id="btnEdit" class="noselect" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                  aria-controls="offcanvasExample" (click)="getIdProducto(productos._id)">
+                  <span class="text">Editar</span>
+                  <span class="icon">
+                    <i id="edit" class="fa-solid fa-pen-to-square"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalAgregarEmpresa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #agregarProducto="ngForm">
+            <div class="mb-3">
+              <label for="inputNombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="inputNombre" name="nombreProducto" #nombreProducto="ngModel"
+                [(ngModel)]="postModelo.nombreProducto" />
+            </div>
+            <div class="mb-3">
+              <label for="inputProveedor" class="form-label">Proveedor</label>
+              <input type="text" class="form-control" id="inputProveedor" name="nombreProveedor"
+                #nombreProveedor="ngModel" [(ngModel)]="postModelo.nombreProveedor" />
+            </div>
+            <div class="mb-3">
+              <label for="inputStock" class="form-label">Stock</label>
+              <input type="number" class="form-control" id="inputStock" name="stock" placeholder="0" #stock="ngModel"
+                [(ngModel)]="postModelo.stock" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+            (click)="postProductos(agregarProducto)">
+            Agregar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalEnviarProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Enviar Producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <div class="mb-3">
+                <label for="inputNombre" class="form-label">Sucursal</label>
+                <select name="Sucursal" class="form-control" name="nombreEmpresa" #nombreEmpresa="ngModel"
+                  [(ngModel)]="modeloPost.nombreEmpresa" required>
+                  <option value="" disabled selected hidden>
+                    Escoja una opción:
+                  </option>
+                  <option *ngFor="let sucursales of obtenerSucursales" value="{{ sucursales.nombreSucursal }}">
+                    {{ sucursales.nombreSucursal }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="mb-3">
+                <label for="inputNombre" class="form-label">Producto</label>
+                <select name="Producto" class="form-control" name="nombreProducto" #nombreProducto="ngModel"
+                  [(ngModel)]="modeloPost.nombreProducto" required>
+                  <option value="" disabled selected hidden>
+                    Escoja una opción:
+                  </option>
+                  <option *ngFor="let productos of getModelo" value="{{ productos.nombreProducto }}">
+                    {{ productos.nombreProducto }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="mb-3">
+                <label for="inputNombre" class="form-label">Cantidad del producto</label>
+                <input type="number" class="form-control" name="cantidadProducto" #cantidadProducto="ngModel"
+                  [(ngModel)]="modeloPost.cantidadProducto" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button id="BtnEnviar" (click)="enviarProductos()" data-bs-dismiss="modal">
+            <div class="svg-wrapper-1">
+              <div class="svg-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="none" d="M0 0h24v24H0z"></path>
+                  <path fill="currentColor"
+                    d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z">
+                  </path>
+                </svg>
+              </div>
+            </div>
+            <span>Enviar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

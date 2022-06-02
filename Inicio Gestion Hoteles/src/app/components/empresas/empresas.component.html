@@ -1,0 +1,249 @@
+<app-navbar></app-navbar>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Document</title>
+</head>
+
+<!-- Modal -->
+
+<body>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Mis sucursales</h5>
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ol class="list-group list-group-numbered">
+            <li *ngFor="let sucursales of getSucursales"
+              class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <div class="fw-bold">{{sucursales.nombreSucursal}}</div>
+                {{sucursales.direccionSucursal}}
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+        Editar empresa
+      </h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form>
+        <div class="mb-3">
+          <label for="inputNombre" class="form-label">Nombre de la empresa</label>
+          <input type="text" class="form-control" id="inputNombreEmpresa" name="nombreEmpresa" #nombreEmpresa="ngModel"
+            [(ngModel)]="getIdModelo.nombreEmpresa" />
+        </div>
+        <div class="mb-3">
+          <label for="inputCantidad" class="form-label">Direccion de la empresa</label>
+          <input type="text" class="form-control" id="inputDireccion" name="direccionEmpresa"
+            #direccionEmpresa="ngModel" [(ngModel)]="getIdModelo.direccionEmpresa" />
+        </div>
+        <div class="mb-3">
+          <label for="inputEmpresa" class="form-label">Tipo Empresa</label>
+          <select name="tipoEmpresa" class="form-control" id="inputTipo" name="tipoEmpresa" #tipoEmpresa="ngModel"
+            [(ngModel)]="getIdModelo.tipoEmpresa" required>
+            <option value="" disabled selected hidden>
+              Escoja una opción:
+            </option>
+            <option *ngFor="let tipos of tipoEmpresas" value="{{ tipos.tipo }}">
+              {{ tipos.tipo }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="inputMunicipio" class="form-label">Municipio</label>
+          <select name="municipioEmpresa" class="form-control" id="inputlocacion" name="municipioEmpresa"
+            #municipioEmpresa="ngModel" [(ngModel)]="getIdModelo.municipioEmpresa" required>
+            <option value="" disabled selected hidden>
+              Escoja una opción:
+            </option>
+            <option *ngFor="let munis of municipios" value="{{ munis.nombre }}">
+              {{ munis.nombre }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="inputUsuario" class="form-label">Usuario</label>
+          <input type="text" class="form-control" id="inputUser" name="usuario" #usuario="ngModel"
+            [(ngModel)]="getIdModelo.usuario" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="inputPass" class="form-label">Password</label>
+          <input type="text" class="form-control" id="inputPass" name="password" #password="ngModel"
+            [(ngModel)]="getIdModelo.password" required />
+        </div>
+
+        <button class="btn btn-success" (click)="putEmpresas()" data-bs-dismiss="offcanvas">
+          Editar empresa
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container">
+    <button id="ap" class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarEmpresa">
+      Agregar Empresa
+    </button>
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <div class="row">
+      <div class="col-12 col-md-6" *ngFor="let empresas of getModelo">
+        <div class="card text-center mb-3">
+          <div class="card-header">
+            {{ empresas.nombreEmpresa }}
+          </div>
+          <div class="card-body">
+            <p class="card-text">
+              Dirección: {{ empresas.direccionEmpresa }} <br />
+              Municipio: {{ empresas.municipioEmpresa }} <br />
+              Tipo: {{ empresas.tipoEmpresa }}
+            </p>
+            <div id="ola" class="card-footer text-muted">
+              <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                <button id="btnDelete" class="noselect" (click)="deleteEmpresas(empresas._id)">
+                  <span class="text">Eliminar</span>
+                  <span class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                      <path
+                        d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z">
+                      </path>
+                    </svg>
+                  </span>
+                </button>
+                <button id="btnEdit" class="noselect" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                  aria-controls="offcanvasExample" (click)="getEmpresaId(empresas._id)">
+                  <span class="text">Editar</span>
+                  <span class="icon">
+                    <i id="edit" class="fa-solid fa-pen-to-square"></i>
+                  </span>
+                </button>
+
+                <button id="btnView" class="noselect" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                  aria-controls="offcanvasExample" (click)="getSucursalesEmpresa(empresas._id)">
+                  <span class="text">Ver Sucursales</span>
+                  <span class="icon">
+                    <i id="eye" class="fa-solid fa-eye"></i>
+                  </span>
+                </button>
+
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                  <!-- <button type="button" class="btn btn-danger" (click)="deleteEmpresas(empresas._id)">
+                    Eliminar
+                  </button>
+                  <button type="button" class="btn btn-warning" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
+                    (click)="getEmpresaId(empresas._id)">
+                    Editar
+                  </button>
+                  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    (click)="getSucursalesEmpresa(empresas._id)">
+                    Ver sucursales
+                  </button>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalAgregarEmpresa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Empresa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #agregarEmpresa="ngForm">
+            <div class="mb-3">
+              <label for="inputNombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="inputNombre" name="nombreEmpresa" #nombreEmpresa="ngModel"
+                [(ngModel)]="postModelo.nombreEmpresa" required />
+            </div>
+            <div class="mb-3">
+              <label for="inputDireccion" class="form-label">Dirección</label>
+              <input type="text" class="form-control" id="inputCantidad" name="direccionEmpresa"
+                #direccionEmpresa="ngModel" [(ngModel)]="postModelo.direccionEmpresa" required />
+            </div>
+            <div class="mb-3">
+              <label for="inputEmpresa" class="form-label">Tipo Empresa</label>
+              <select name="tipoEmpresa" class="form-control" id="inputEmpresa" name="tipoEmpresa"
+                #tipoEmpresa="ngModel" [(ngModel)]="postModelo.tipoEmpresa" required>
+                <option value="" disabled selected hidden>
+                  Escoja una opción:
+                </option>
+                <option *ngFor="let tipos of tipoEmpresas" value="{{ tipos.tipo }}">
+                  {{ tipos.tipo }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="inputMunicipio" class="form-label">Municipio</label>
+              <select name="municipioEmpresa" class="form-control" id="inputMunicipio" name="municipioEmpresa"
+                #municipioEmpresa="ngModel" [(ngModel)]="postModelo.municipioEmpresa" required>
+                <option value="" disabled selected hidden>
+                  Escoja una opción:
+                </option>
+                <option *ngFor="let munis of municipios" value="{{ munis.nombre }}">
+                  {{ munis.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="inputUsuario" class="form-label">Usuario</label>
+              <input type="text" class="form-control" id="inputUsuario" name="usuario" #usuario="ngModel"
+                [(ngModel)]="postModelo.usuario" required />
+            </div>
+            <div class="mb-3">
+              <label for="inputPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="inputPassword" name="password" #password="ngModel"
+                [(ngModel)]="postModelo.password" required />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="postEmpresas(agregarEmpresa)" >
+            Agregar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
