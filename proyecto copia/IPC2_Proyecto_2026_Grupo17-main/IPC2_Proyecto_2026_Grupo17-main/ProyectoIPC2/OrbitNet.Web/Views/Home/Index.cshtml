@@ -1,0 +1,87 @@
+﻿@model OrbitNet.Web.Models.XmlIngestionViewModel
+
+@{
+    ViewData["Title"] = "Ingesta XML";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h1 class="h3 mb-3">Ingesta XML con XPath</h1>
+                    <p class="text-muted mb-4">Pega el XML o sube el archivo del formulario para leer los satélites con <code>XmlDocument</code> y consultas XPath.</p>
+
+                    <form asp-action="Index" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label asp-for="XmlFile" class="form-label">Archivo XML</label>
+                            <input asp-for="XmlFile" type="file" class="form-control" accept=".xml" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="XmlContent" class="form-label">XML pegado manualmente</label>
+                            <textarea asp-for="XmlContent" class="form-control" rows="12" placeholder="Pega aquí el XML si no vas a subir archivo."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Procesar XML</button>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.Errors.Length > 0)
+            {
+                <div class="alert alert-danger">
+                    <h2 class="h5">Errores</h2>
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <p><strong>Etiqueta:</strong> @Model.ErrorTag</p>
+                        @if (Model.ErrorLine.HasValue)
+                        {
+                            <p><strong>Línea:</strong> @Model.ErrorLine</p>
+                        }
+                        <p><strong>Detalle:</strong> @Model.ErrorMessage</p>
+                    }
+                    <ul class="mb-0">
+                        @foreach (var error in Model.Errors)
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            @if (Model.Results.Length > 0)
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Satélites encontrados</h2>
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>IP</th>
+                                        <th>Tipo de órbita</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var satellite in Model.Results)
+                                    {
+                                        <tr>
+                                            <td>@satellite.Id</td>
+                                            <td>@satellite.Name</td>
+                                            <td>@satellite.IpAddress</td>
+                                            <td>@satellite.OrbitType</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+# Ignorar carpetas de compilación en cualquier nivel
+**/[Bb]in/
+**/[Oo]bj/
+
+# Archivos de IDE 
+.vscode/
+.vs/
+*.user
+*.suo
+
+# Archivos temporales y de SO
+*.log
+*.db
+.DS_Store
+Thumbs.db
