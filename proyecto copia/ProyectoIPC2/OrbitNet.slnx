@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="OrbitNet.Core/OrbitNet.Core.csproj" />
+  <Project Path="OrbitNet.TDAs/OrbitNet.TDAs.csproj" />
+  <Project Path="OrbitNet.Tests/OrbitNet.Tests.csproj" />
+  <Project Path="OrbitNet.Web/OrbitNet.Web.csproj" />
+</Solution>

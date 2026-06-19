@@ -1,0 +1,58 @@
+│
+├── OrbitNet.Web\                              # CAPA DE PRESENTACIÓN Y API REST
+│   ├── OrbitNet.Web.csproj                    # Archivo del proyecto web
+│   ├── Program.cs                             # Punto de entrada y configuración de ASP.NET Core
+│   ├── appsettings.json                       # Variables de configuración del entorno
+│   ├── Controllers\
+│   │   ├── CargaController.cs                 # Controlador API para ingesta de XML
+│   │   └── HomeController.cs                  # Controlador principal de la interfaz de usuario MVC
+│   ├── Models\                                # Modelos exclusivos para las Vistas (ViewModels)
+│   │   ├── XmlIngestionViewModel.cs           # Modelo para la vista de carga
+│   │   └── ErrorViewModel.cs                  # Modelo de vista (ViewModel) estándar de errores
+│   ├── Views\
+│   │   ├── _ViewImports.cshtml                # Importaciones globales para Razor
+│   │   ├── _ViewStart.cshtml                  # Definición del Layout principal
+│   │   ├── Shared\                            
+│   │   │   └── _Layout.cshtml                 # Plantilla maestra HTML
+│   │   └── Home\
+│   │       └── Index.cshtml                   # Vista principal de carga de archivos
+│   └── wwwroot\                               # Archivos estáticos públicos (CSS, JS, Libs)
+│       ├── css\                               
+│       ├── js\                                
+│       └── lib\                               
+│
+├── OrbitNet.Core\                             # CAPA DE LÓGICA DE NEGOCIO (El puente)
+│   ├── OrbitNet.Core.csproj                   # Configuración del proyecto Core
+│   ├── Models\                                # Objetos de Transferencia de Datos (DTOs)
+│   │   ├── DatosXML.cs                        # Estructura de mapeo del XML
+│   │   ├── SatelliteImportItem.cs             # Record inmutable para modelar los satélites extraídos
+│   │   ├── XmlImportResult.cs                 # Clase contenedora del resultado de la importación
+│   │   └── XmlValidationError.cs              # Encapsula detalles de errores XML
+│   ├── Services\                              # Orquestadores y lógica principal
+│   │   ├── LectorXML.cs                       # Intermediario entre la API y el motor de ingesta
+│   │   └── XmlXPathIngestionService.cs        # Clase Core: Lectura, Parseo y Extracción de XML (XPath)
+│   └── Validaciones\                          # Reglas de Negocio
+│       └── ValidadorRegex.cs                  # Regex para IP, ID y Coordenadas
+│
+├── OrbitNet.Data\                             # CAPA DE PERSISTENCIA (Punteros y Memoria RAM)
+│   ├── OrbitNet.Data.csproj                   # Configuración del proyecto de persistencia
+│   ├── Interfaces\
+│   │   └── IAbstractCollection.cs             # Interfaz base abstracta exigida para TDAs
+│   ├── Nodes\                                 # Constructores de nodos (Cero lógica web)
+│   │   ├── HeaderNode.cs                      # Nodo cabecera para la matriz dispersa
+│   │   ├── MatrixNode.cs                      # Nodo de datos para la matriz dispersa
+│   │   ├── MensajeAbbNode.cs                  # Nodos para la estructura del buffer de mensajes
+│   │   └── SateliteAvlNode.cs                 # Nodos para el Árbol AVL
+│   └── Structures\                            # Lógica de asignación de memoria manual
+│       ├── RedSatelitalPlano.cs               # TDA: Matriz Dispersa Ortogonal Bidireccional
+│       ├── ArbolSatelitesAvl.cs               # TDA: Árbol AVL Auto-Balanceado
+│       ├── BufferMensajesAbb.cs               # TDA: Árbol Binario de Búsqueda (ABB)
+│       └── LogAuditoria.cs                    # TDA: Lista Enlazada Simple para logs
+│
+├── OrbitNet.Tests\                            # CAPA DE PRUEBAS AUTOMATIZADAS (xUnit)
+│   ├── OrbitNet.Tests.csproj                  # Configuración del proyecto de pruebas
+│   └── XmlXPathIngestionServiceTests.cs       # Pruebas unitarias reales para el servicio de XML
+│
+└── PruebasTemporales\                         # CAPA DE PRUEBAS MANUALES (Sandbox)
+    ├── PruebasTemporales.csproj               # Archivo del proyecto de consola
+    └── Program.cs                             # Ejecución principal de pruebas en consola
